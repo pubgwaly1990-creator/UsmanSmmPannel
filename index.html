@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usman SMM — Social Media Marketing Panel</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-page: #f4f6fa;
+            --bg-surface: #ffffff;
+            --bg-muted: #f1f4f9;
+            --border-color: #e5e9f2;
+            --text-main: #0f172a;
+            --text-sub: #64748b;
+            --royal-blue: #155eef;
+            --royal-blue-dark: #004eeb;
+        }
+
+        html.dark {
+            --bg-page: #0f172a;
+            --bg-surface: #1e293b;
+            --bg-muted: #0f172a;
+            --border-color: #334155;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .surface-card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Custom Mouse-Click Circle Ripple Animation */
+        .usman-click-ripple {
+            position: fixed;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #155eef;
+            background: rgba(21, 94, 239, 0.14);
+            border-radius: 9999px;
+            pointer-events: none;
+            transform: translate(-50%, -50%) scale(0.3);
+            z-index: 99999;
+            animation: usmanCircleExpand 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes usmanCircleExpand {
+            0% {
+                opacity: 0.95;
+                transform: translate(-50%, -50%) scale(0.3);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(3.3);
+            }
+        }
+
+        /* Smooth View & Tab Transitions */
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+            animation: smoothViewEnter 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .subtab-pane {
+            display: none;
+        }
+
+        .subtab-pane.active {
+            display: block;
+            animation: smoothViewEnter 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes smoothViewEnter {
+            0% {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Custom Dropdown Lists (Nawab / Usman SMM Exact Style) */
+        .custom-dd-panel {
+            max-height: 310px;
+            overflow-y: auto;
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.14);
+        }
+
+        .custom-dd-item {
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.15s ease;
+        }
+
+        .custom-dd-item:last-child {
+            border-bottom: none;
+        }
+
+        .custom-dd-item:hover {
+            background-color: rgba(21, 94, 239, 0.05);
+        }
+
+        .custom-dd-item.selected {
+            background-color: rgba(21, 94, 239, 0.09);
+            border-left: 3.5px solid #155eef;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(100, 116, 139, 0.35);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #155eef;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex">
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="mobileSidebarBackdrop" onclick="toggleMobileSidebar(false)" class="fixed inset-0 bg-slate-900/50 z-40 hidden lg:hidden"></div>
+
+    <!-- LEFT SIDEBAR -->
+    <aside id="leftSidebar" class="fixed lg:sticky top-0 left-0 z-50 w-64 h-screen surface-card flex flex-col shrink-0 -translate-x-full lg:translate-x-0 transition-transform duration-300">
+        <!-- Brand Logo -->
+        <div class="h-16 px-4 flex items-center justify-between border-b" style="border-color: var(--border-color);">
+            <div onclick="switchView('new-order')" class="flex items-center gap-2.5 cursor-pointer">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#155eef] to-[#004eeb] text-white font-extrabold text-sm flex items-center justify-center shadow-sm">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <span class="font-extrabold text-lg tracking-tight">
+                    <span style="color: var(--text-main);">Usman</span> <span class="text-[#155eef]">SMM</span>
+                </span>
+            </div>
+            <button type="button" onclick="toggleMobileSidebar(false)" class="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+        </div>
+
+        <!-- Royal Blue Balance Card -->
+        <div class="p-3.5">
+            <div class="rounded-2xl p-4 bg-gradient-to-br from-[#1d6bf3] via-[#155eef] to-[#0040c1] text-white shadow-lg shadow-blue-600/20">
+                <div class="text-[11px] font-medium text-blue-100">Balance</div>
+                <div id="sidebarBalanceDisplay" class="text-xl font-extrabold tracking-tight mt-0.5">Rs 1.362</div>
+                <button type="button" onclick="switchView('add-funds')" class="mt-3 w-full py-2 px-3 rounded-full bg-white hover:bg-blue-50 text-[#0f172a] font-bold text-xs shadow-sm transition flex items-center justify-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-plus text-[10px]"></i>
+                    <span>Add funds</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="flex-1 overflow-y-auto px-3 pb-4 space-y-4 text-xs">
+            <!-- ORDERS -->
+            <div>
+                <div class="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider" style="color: var(--text-sub);">Orders</div>
+                <div class="space-y-0.5">
+                    <button type="button" data-view="new-order" onclick="switchView('new-order')" class="sidebar-nav-btn w-full px-3 py-2 rounded-xl font-semibold flex items-center gap-2.5 bg-blue-50 text-[#155eef] dark:bg-blue-950/60 dark:text-blue-400 cursor-pointer">
+                        <i class="fa-solid fa-circle-plus w-4 text-center"></i>
+                        <span>New Order</span>
+                    </button>
+                    <button type="button" data-view="bulk-orders" onclick="switchView('bulk-orders')" class="sidebar-nav-btn w-full px-3 py-2 rounded-xl font-medium flex items-center gap-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer" style="color: var(--text-sub);">
+                        <i class="fa-solid fa-layer-group w-4 text-center"></i>
+                        <span>Bulk Orders</span>
+                    </button>
+                    <button type="button" data-view="my-orders" onclick="switchView('my-orders')" class="sidebar-nav-btn w-full px-3 py-2 rounded-xl font-medium flex items-center justify-between hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer" style="color: var(--text-sub);">
+                        <span class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-list-check w-4 text-center"></i>
+                            <span>My Orders</span>
+                        </span>
+                        <span id="sidebarOrdersBadge" class="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-[#155eef] dark:bg-blue-950 dark:text-blue-300">0</span>
+                    </button>
+                    <button type="button" data-view="refill" onclick="switchView('refill')" class="sidebar-nav-btn w-full px-3 py-2 rounded-xl font-medium flex items-center gap-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer" style="color: var(--text-sub);">
+                        <i class="fa-solid fa-rotate-right w-4 text-center"></i>
+                        <span>Refill</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- FUNDS -->
+            <div>
+                <div class="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider" style="color: var(--text-sub);">Funds</div>
+                <div class="space-y-0.5">
+                    <button type="button" data-view="add-funds" onclick="switchView('add-funds')" class="sidebar-nav-btn w-full px-3 py-2 rounded-xl font-medium flex items-center gap-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer" style="color: var(--text-sub);">
+                        <i class="fa-solid fa-wallet w-4 text-center"></i>
+                        <span>Add Funds</span>
+                    </button>
+                    <button type="button" data-view="transactions" onclick="switchView('transactions')" class="sidebar-nav-btn w-full px-3 py-2 rounded-xl font-medium flex items-center gap-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer" style="color: var(--text-sub);">
+                        <i class="fa-solid fa-receipt w-4 text-center"></i>
+                        <span>Transactions</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- CATALOG -->
+            <div>
+                <div class="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider" style="color: var(--text-sub);">Catalog</div>
+                <div class="space-y-0.5">
+                    <button type="button" data-view="services" onclick="switchView('services')" class="sidebar-nav-btn w-full px-3 py-2 rounded-xl font-medium flex items-center gap-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer" style="color: var(--text-sub);">
+                        <i class="fa-solid fa-table-cells-large w-4 text-center"></i>
+                        <span>Services</span>
+                    </button>
+                    <button type="button" data-view="updates" onclick="switchView('updates')" class="sidebar-nav-btn w-full px-3 py-2 rounded-xl font-medium flex items-center gap-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer" style="color: var(--text-sub);">
+                        <i class="fa-solid fa-bell w-4 text-center"></i>
+                        <span>Updates</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- SUPPORT -->
+            <div>
+                <div class="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider" style="color: var(--text-sub);">Support</div>
+                <div class="space-y-0.5">
+                    <button type="button" data-view="ai-support" onclick="switchView('ai-support')" class="sidebar-nav-btn w-full px-3 py-2 rounded-xl font-medium flex items-center gap-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer" style="color: var(--text-sub);">
+                        <i class="fa-solid fa-wand-magic-sparkles w-4 text-center"></i>
+                        <span>AI Support</span>
+                    </button>
+                    <button type="button" data-view="tickets" onclick="switchView('tickets')" class="sidebar-nav-btn w-full px-3 py-2 rounded-xl font-medium flex items-center justify-between hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer" style="color: var(--text-sub);">
+                        <span class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-ticket w-4 text-center"></i>
+                            <span>Tickets</span>
+                        </span>
+                        <span id="ticketsBadgeCount" class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-blue-50 text-[#155eef] dark:bg-slate-800 dark:text-blue-400">0</span>
+                    </button>
+                    <button type="button" data-view="faq" onclick="switchView('faq')" class="sidebar-nav-btn w-full px-3 py-2 rounded-xl font-medium flex items-center gap-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer" style="color: var(--text-sub);">
+                        <i class="fa-solid fa-circle-question w-4 text-center"></i>
+                        <span>FAQ</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- GROW & EARN -->
+            <div>
+                <div class="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider" style="color: var(--text-sub);">Grow &amp; Build</div>
+                <div class="space-y-0.5">
+                    <button type="button" data-view="api" onclick="switchView('api')" class="sidebar-nav-btn w-full px-3 py-2 rounded-xl font-medium flex items-center gap-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer" style="color: var(--text-sub);">
+                        <i class="fa-solid fa-code w-4 text-center"></i>
+                        <span>API</span>
+                    </button>
+                    <button type="button" data-view="invite" onclick="switchView('invite')" class="sidebar-nav-btn w-full px-3 py-2 rounded-xl font-medium flex items-center gap-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer" style="color: var(--text-sub);">
+                        <i class="fa-solid fa-user-plus w-4 text-center"></i>
+                        <span>Invite &amp; Earn</span>
+                    </button>
+                    <button type="button" data-view="child-panels" onclick="switchView('child-panels')" class="sidebar-nav-btn w-full px-3 py-2 rounded-xl font-medium flex items-center gap-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer" style="color: var(--text-sub);">
+                        <i class="fa-solid fa-sitemap w-4 text-center"></i>
+                        <span>Child Panels</span>
+                    </button>
+                    <button type="button" data-view="terms" onclick="switchView('terms')" class="sidebar-nav-btn w-full px-3 py-2 rounded-xl font-medium flex items-center gap-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer" style="color: var(--text-sub);">
+                        <i class="fa-solid fa-file-contract w-4 text-center"></i>
+                        <span>Terms</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Bottom Account Controls -->
+        <div class="p-3 border-t space-y-2" style="border-color: var(--border-color);">
+            <div class="px-1 text-[10px] font-bold uppercase tracking-wider" style="color: var(--text-sub);">Account</div>
+            <div class="grid grid-cols-2 gap-2">
+                <button type="button" onclick="handleAdminAccess()" class="py-1.5 px-2.5 rounded-full border text-xs font-semibold hover:border-[#155eef] hover:text-[#155eef] transition flex items-center justify-center gap-1 cursor-pointer" style="border-color: var(--border-color);">
+                    <i class="fa-solid fa-gear text-[11px]"></i>
+                    <span>Settings</span>
+                </button>
+                <button type="button" onclick="showToast('Logged in as UsmanAmjad')" class="py-1.5 px-2.5 rounded-full border text-xs font-semibold hover:border-rose-500 hover:text-rose-500 transition flex items-center justify-center gap-1 cursor-pointer" style="border-color: var(--border-color);">
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- RIGHT MAIN WRAPPER -->
+    <div class="flex-1 flex flex-col min-w-0">
+
+        <!-- TOP HEADER BAR -->
+        <header class="sticky top-0 z-30 h-16 px-4 sm:px-6 surface-card flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <button type="button" onclick="toggleMobileSidebar(true)" class="lg:hidden w-9 h-9 rounded-xl border flex items-center justify-center cursor-pointer" style="border-color: var(--border-color);">
+                    <i class="fa-solid fa-bars text-sm"></i>
+                </button>
+                <h1 id="topHeaderTitle" class="font-bold text-base sm:text-lg" style="color: var(--text-main);">New Order</h1>
+            </div>
+
+            <!-- Right Header Controls -->
+            <div class="flex items-center gap-2">
+                <!-- Language -->
+                <button type="button" onclick="toggleLanguagePill()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold hover:border-[#155eef] transition cursor-pointer" style="border-color: var(--border-color);">
+                    <i class="fa-solid fa-globe text-[#155eef]"></i>
+                    <span id="langPillLabel">EN</span>
+                    <i class="fa-solid fa-chevron-down text-[9px] opacity-60"></i>
+                </button>
+
+                <!-- Currency -->
+                <button type="button" onclick="toggleCurrencyPill()" class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold hover:border-[#155eef] transition cursor-pointer" style="border-color: var(--border-color);">
+                    <span id="currencyPillLabel">Rs PKR</span>
+                    <i class="fa-solid fa-chevron-down text-[9px] opacity-60"></i>
+                </button>
+
+                <!-- Theme Toggle -->
+                <button type="button" onclick="toggleThemeMode()" title="Toggle Theme" class="w-8 h-8 rounded-full border flex items-center justify-center hover:border-[#155eef] transition cursor-pointer" style="border-color: var(--border-color);">
+                    <i id="themeToggleIcon" class="fa-solid fa-moon text-xs"></i>
+                </button>
+
+                <!-- Balance Pill -->
+                <button type="button" onclick="switchView('add-funds')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-bold hover:border-[#155eef] transition cursor-pointer" style="border-color: var(--border-color);">
+                    <i class="fa-solid fa-wallet text-[#155eef]"></i>
+                    <span id="headerBalancePill">Rs 1.362</span>
+                </button>
+
+                <!-- User / Admin Dropdown Pill -->
+                <div class="relative">
+                    <button type="button" onclick="toggleUserDropdown()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold hover:border-[#155eef] transition cursor-pointer" style="border-color: var(--border-color);">
+                        <span class="w-5 h-5 rounded-full bg-blue-100 text-[#155eef] flex items-center justify-center text-[10px] font-bold">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <span class="hidden sm:inline">UsmanAmjad</span>
+                        <i class="fa-solid fa-chevron-down text-[9px] opacity-60"></i>
+                    </button>
+                    <div id="userProfileDropdown" class="hidden absolute right-0 mt-2 w-48 rounded-2xl surface-card shadow-xl p-1.5 text-xs z-50">
+                        <div class="px-3 py-2 border-b" style="border-color: var(--border-color);">
+                            <div class="font-bold">UsmanAmjad</div>
+                            <div class="text-[11px]" style="color: var(--text-sub);">WhatsApp: 03028372072</div>
+                        </div>
+                        <button type="button" onclick="toggleUserDropdown(false); switchView('add-funds');" class="w-full text-left px-3 py-2 rounded-xl hover:bg-blue-50 dark:hover:bg-slate-800 flex items-center gap-2 mt-1 cursor-pointer">
+                            <i class="fa-solid fa-wallet text-[#155eef]"></i>
+                            <span>Add Funds</span>
+                        </button>
+                        <button type="button" onclick="toggleUserDropdown(false); handleAdminAccess();" class="w-full text-left px-3 py-2 rounded-xl hover:bg-blue-50 dark:hover:bg-slate-800 flex items-center gap-2 text-[#155eef] font-semibold cursor-pointer">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <span>Admin Panel (PIN)</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN WORKSPACE -->
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+            <!-- ===============================================================
+                 VIEW 1: NEW ORDER (EXACT HERO + ORDER CARD + RIGHT WIDGETS)
+                 =============================================================== -->
+            <section id="view-new-order" class="view-section active space-y-6">
+
+                <!-- Royal Blue Welcome Banner -->
+                <div class="rounded-2xl p-6 sm:p-7 bg-gradient-to-r from-[#155eef] via-[#1b64f2] to-[#004eeb] text-white shadow-lg shadow-blue-600/15 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div>
+                        <div class="text-[11px] font-bold uppercase tracking-wider text-blue-100">WELCOME BACK, USMANAMJAD</div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold mt-1 tracking-tight">Place a new order</h2>
+                        <p class="text-xs sm:text-sm text-blue-100 mt-1">Join our channels for order updates and news.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2.5">
+                        <a id="bannerWhatsappChannelLink" href="https://wa.me/923028372072?text=Assalam-o-Alaikum%20Usman%20SMM%20Updates" target="_blank" rel="noopener noreferrer"
+                            class="px-4 py-2.5 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 text-white text-xs font-semibold flex items-center gap-2 transition">
+                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                            <span>WhatsApp channel</span>
+                        </a>
+                        <a href="https://t.me/" target="_blank" rel="noopener noreferrer"
+                            class="px-4 py-2.5 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 text-white text-xs font-semibold flex items-center gap-2 transition">
+                            <i class="fa-brands fa-telegram text-sm"></i>
+                            <span>Telegram channel</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Two-Column Main Content -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+                    <!-- LEFT / CENTER ORDER CARD (8 Columns) -->
+                    <div class="lg:col-span-8 surface-card rounded-2xl shadow-xs overflow-hidden">
+                        <!-- Top Tabs: New Order | Mass Order -->
+                        <div class="grid grid-cols-2 border-b p-1.5 gap-1.5" style="border-color: var(--border-color); background-color: var(--bg-muted);">
+                            <button type="button" id="orderCardTab-single" onclick="switchOrderSubTab('single')"
+                                class="py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#155eef] text-white shadow-xs transition cursor-pointer">
+                                New Order
+                            </button>
+                            <button type="button" id="orderCardTab-mass" onclick="switchOrderSubTab('mass')"
+                                class="py-2.5 rounded-xl text-xs sm:text-sm font-semibold hover:bg-white/60 dark:hover:bg-slate-800 transition cursor-pointer" style="color: var(--text-sub);">
+                                Mass Order
+                            </button>
+                        </div>
+
+                        <!-- SUB-TAB A: SINGLE NEW ORDER -->
+                        <div id="subtab-single" class="subtab-pane active p-5 sm:p-6 space-y-4">
+                            <!-- Platform Filter Pills -->
+                            <div id="platformPillsContainer" class="flex flex-wrap gap-1.5">
+                                <!-- Populated via JS -->
+                            </div>
+
+                            <!-- Search Service Box -->
+                            <div class="relative">
+                                <i class="fa-solid fa-magnifying-glass text-xs text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                                <input type="text" id="serviceSearchInput" oninput="filterCategoriesAndServices()" placeholder="Search for a service..."
+                                    class="w-full pl-9 pr-4 py-2.5 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-[#155eef]" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                            </div>
+
+                            <!-- Custom Category Dropdown (Matching Screenshot Icons + Left Blue Highlight) -->
+                            <div class="relative" id="categoryDropdownWrapper">
+                                <label class="block text-xs font-bold mb-1.5" style="color: var(--text-main);">Category</label>
+                                <input type="hidden" id="categorySelect" value="">
+                                <button type="button" id="categoryTriggerBtn" onclick="toggleCustomDropdown('category')"
+                                    class="w-full px-3 py-2.5 rounded-xl border text-left text-xs sm:text-sm font-medium flex items-center justify-between gap-2.5 focus:outline-none focus:border-[#155eef] cursor-pointer"
+                                    style="background-color: var(--bg-surface); border-color: var(--border-color);">
+                                    <span class="flex items-center gap-2.5 min-w-0">
+                                        <span id="categoryTriggerIcon" class="w-7 h-7 rounded-lg border flex items-center justify-center shrink-0" style="border-color: var(--border-color); background-color: var(--bg-muted);">
+                                            <i class="fa-brands fa-instagram text-pink-500 text-xs"></i>
+                                        </span>
+                                        <span id="categoryTriggerText" class="truncate font-semibold">Select Category</span>
+                                    </span>
+                                    <i class="fa-solid fa-chevron-down text-[11px] opacity-60 shrink-0"></i>
+                                </button>
+                                <div id="categoryDropdownMenu" class="hidden absolute left-0 right-0 mt-1.5 rounded-2xl custom-dd-panel z-40"></div>
+                            </div>
+
+                            <!-- Custom Service Dropdown (Matching Id-xxx Pill + Italic Guarantee + Right Rs/1K Badge) -->
+                            <div class="relative" id="serviceDropdownWrapper">
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <label class="text-xs font-bold" style="color: var(--text-main);">Service</label>
+                                    <span id="selectedServiceBadge" class="inline-flex items-center gap-1.5 text-[11px] font-bold">
+                                        <span class="px-2 py-0.5 rounded-full bg-[#155eef] text-white">Id-468</span>
+                                        <span class="px-2 py-0.5 rounded-full bg-blue-50 text-[#155eef] dark:bg-blue-950 dark:text-blue-300">Rs55.680 /1K</span>
+                                    </span>
+                                </div>
+                                <input type="hidden" id="serviceSelect" value="">
+                                <button type="button" id="serviceTriggerBtn" onclick="toggleCustomDropdown('service')"
+                                    class="w-full px-3 py-2.5 rounded-xl border text-left text-xs sm:text-sm font-medium flex items-center justify-between gap-2.5 focus:outline-none focus:border-[#155eef] cursor-pointer"
+                                    style="background-color: var(--bg-surface); border-color: var(--border-color);">
+                                    <span class="flex items-center gap-2.5 min-w-0 flex-1">
+                                        <span id="serviceTriggerIdPill" class="px-2.5 py-0.5 rounded-full bg-[#155eef] text-white text-[11px] font-extrabold shrink-0">Id-468</span>
+                                        <span id="serviceTriggerText" class="truncate font-medium">Select Service</span>
+                                    </span>
+                                    <span class="flex items-center gap-2 shrink-0">
+                                        <span id="serviceTriggerRatePill" class="px-2.5 py-0.5 rounded-full bg-blue-50 text-[#155eef] dark:bg-blue-950 dark:text-blue-300 text-[11px] font-extrabold">Rs55.680 /1K</span>
+                                        <i class="fa-solid fa-chevron-down text-[11px] opacity-60"></i>
+                                    </span>
+                                </button>
+                                <div id="serviceDropdownMenu" class="hidden absolute left-0 right-0 mt-1.5 rounded-2xl custom-dd-panel z-40"></div>
+                            </div>
+
+                            <!-- Link Input -->
+                            <div>
+                                <label for="orderLinkInput" class="block text-xs font-bold mb-1.5" style="color: var(--text-main);">Link</label>
+                                <input type="text" id="orderLinkInput" placeholder="https://www.tiktok.com/@username/video/..."
+                                    class="w-full px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm focus:outline-none focus:border-[#155eef]" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                            </div>
+
+                            <!-- Quantity Input -->
+                            <div>
+                                <label for="orderQuantityInput" class="block text-xs font-bold mb-1.5" style="color: var(--text-main);">Quantity</label>
+                                <input type="number" id="orderQuantityInput" value="1000" min="10" max="1000000" oninput="recalculateCharge()"
+                                    class="w-full px-3.5 py-2.5 rounded-xl border-2 border-[#155eef] text-xs sm:text-sm font-semibold focus:outline-none" style="background-color: var(--bg-surface);">
+                                <div id="qtyMinMaxHelper" class="text-[11px] mt-1" style="color: var(--text-sub);">Min: 10 &nbsp; Max: 1000000</div>
+                            </div>
+
+                            <!-- Charge Summary Box -->
+                            <div class="rounded-xl px-4 py-3.5 border flex items-center justify-between" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                                <span class="text-[11px] font-bold uppercase tracking-wider" style="color: var(--text-sub);">CHARGE</span>
+                                <span id="liveChargeDisplay" class="text-lg sm:text-xl font-extrabold text-[#155eef]">Rs 39.6035</span>
+                            </div>
+
+                            <!-- Submit Mode & Button -->
+                            <div class="flex items-center justify-between text-[11px] px-1" style="color: var(--text-sub);">
+                                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" id="alsoOpenWhatsappCheck" checked class="rounded accent-[#155eef]">
+                                    <span>Also send order receipt to WhatsApp (03028372072)</span>
+                                </label>
+                            </div>
+
+                            <button type="button" onclick="handleSingleOrderSubmit()"
+                                class="w-full py-3.5 px-5 rounded-full bg-[#155eef] hover:bg-[#004eeb] text-white font-extrabold text-xs sm:text-sm tracking-wide shadow-md shadow-blue-600/20 transition flex items-center justify-center gap-2 cursor-pointer">
+                                <span>SUBMIT</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+
+                        <!-- SUB-TAB B: MASS ORDER -->
+                        <div id="subtab-mass" class="subtab-pane p-5 sm:p-6 space-y-4">
+                            <div class="rounded-xl p-3.5 bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 text-xs">
+                                <div class="font-bold text-[#155eef] mb-1">Mass Order Format (One order per line)</div>
+                                <code class="text-[11px] block" style="color: var(--text-sub);">service_id | link | quantity</code>
+                                <code class="text-[11px] block mt-0.5 text-slate-500">968 | https://facebook.com/page | 5000</code>
+                            </div>
+                            <textarea id="massOrderTextarea" rows="7" placeholder="968 | https://facebook.com/yourpage | 2000&#10;1024 | https://tiktok.com/@usman/video/123 | 10000"
+                                class="w-full p-3.5 rounded-xl border text-xs font-mono focus:outline-none focus:border-[#155eef]" style="background-color: var(--bg-muted); border-color: var(--border-color);"></textarea>
+                            <button type="button" onclick="handleMassOrderSubmit()"
+                                class="w-full py-3 rounded-full bg-[#155eef] hover:bg-[#004eeb] text-white font-extrabold text-xs sm:text-sm transition cursor-pointer">
+                                SUBMIT MASS ORDER &rarr;
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT WIDGETS COLUMN (4 Columns) -->
+                    <div class="lg:col-span-4 space-y-5">
+
+                        <!-- Need Help Card -->
+                        <div class="surface-card rounded-2xl p-5 shadow-xs space-y-3">
+                            <div>
+                                <h3 class="font-extrabold text-base" style="color: var(--text-main);">Need help?</h3>
+                                <p class="text-xs" style="color: var(--text-sub);">Support is one tap away.</p>
+                            </div>
+
+                            <div class="space-y-2">
+                                <button type="button" onclick="switchView('ai-support')" class="w-full p-3 rounded-xl border hover:border-[#155eef] flex items-center justify-between transition cursor-pointer" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                                    <span class="flex items-center gap-3 text-xs font-bold">
+                                        <span class="w-8 h-8 rounded-lg bg-[#155eef] text-white flex items-center justify-center">
+                                            <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+                                        </span>
+                                        <span>AI Support</span>
+                                    </span>
+                                    <i class="fa-solid fa-chevron-right text-[11px] opacity-50"></i>
+                                </button>
+
+                                <a href="https://wa.me/923028372072?text=Assalam-o-Alaikum%20Usman%20SMM%20Support" target="_blank" rel="noopener noreferrer"
+                                    class="w-full p-3 rounded-xl border hover:border-[#155eef] flex items-center justify-between transition" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                                    <span class="flex items-center gap-3 text-xs font-bold">
+                                        <span class="w-8 h-8 rounded-lg bg-[#155eef] text-white flex items-center justify-center">
+                                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                                        </span>
+                                        <span>WhatsApp support</span>
+                                    </span>
+                                    <i class="fa-solid fa-chevron-right text-[11px] opacity-50"></i>
+                                </a>
+
+                                <a href="https://t.me/" target="_blank" rel="noopener noreferrer"
+                                    class="w-full p-3 rounded-xl border hover:border-[#155eef] flex items-center justify-between transition" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                                    <span class="flex items-center gap-3 text-xs font-bold">
+                                        <span class="w-8 h-8 rounded-lg bg-[#155eef] text-white flex items-center justify-center">
+                                            <i class="fa-brands fa-telegram text-sm"></i>
+                                        </span>
+                                        <span>Telegram support</span>
+                                    </span>
+                                    <i class="fa-solid fa-chevron-right text-[11px] opacity-50"></i>
+                                </a>
+
+                                <button type="button" onclick="switchView('tickets')" class="w-full p-3 rounded-xl border hover:border-[#155eef] flex items-center justify-between transition cursor-pointer" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                                    <span class="flex items-center gap-3 text-xs font-bold">
+                                        <span class="w-8 h-8 rounded-lg bg-[#155eef] text-white flex items-center justify-center">
+                                            <i class="fa-solid fa-headset text-xs"></i>
+                                        </span>
+                                        <span>Open a ticket</span>
+                                    </span>
+                                    <i class="fa-solid fa-chevron-right text-[11px] opacity-50"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Service Updates • LIVE Card -->
+                        <div class="surface-card rounded-2xl p-5 shadow-xs space-y-3">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <h3 class="font-extrabold text-base" style="color: var(--text-main);">Service updates</h3>
+                                    <span class="inline-flex items-center gap-1 text-[10px] font-extrabold text-emerald-600">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                        LIVE
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div id="liveServiceUpdatesFeed" class="max-h-72 overflow-y-auto pr-1 divide-y text-xs" style="border-color: var(--border-color);">
+                                <!-- Populated via JS -->
+                            </div>
+
+                            <div class="pt-1 text-center">
+                                <button type="button" onclick="switchView('updates')" class="text-xs font-bold text-[#155eef] hover:underline cursor-pointer">
+                                    View all updates &rarr;
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===============================================================
+                 VIEW 2: BULK ORDERS SHORTCUT
+                 =============================================================== -->
+            <section id="view-bulk-orders" class="view-section space-y-4">
+                <div class="surface-card rounded-2xl p-6 space-y-4 max-w-3xl">
+                    <h2 class="text-lg font-extrabold">Bulk &amp; Mass Orders</h2>
+                    <p class="text-xs" style="color: var(--text-sub);">Paste multiple orders at once using <code>ServiceID | Link | Quantity</code>.</p>
+                    <textarea id="bulkPageTextarea" rows="8" placeholder="968 | https://facebook.com/page1 | 5000&#10;1024 | https://tiktok.com/@user/video/1 | 25000"
+                        class="w-full p-3.5 rounded-xl border text-xs font-mono" style="background-color: var(--bg-muted); border-color: var(--border-color);"></textarea>
+                    <button type="button" onclick="submitBulkFromPage()" class="px-6 py-2.5 rounded-full bg-[#155eef] text-white font-bold text-xs cursor-pointer">
+                        Process Bulk Orders &rarr;
+                    </button>
+                </div>
+            </section>
+
+            <!-- ===============================================================
+                 VIEW 3: MY ORDERS
+                 =============================================================== -->
+            <section id="view-my-orders" class="view-section space-y-4">
+                <div class="surface-card rounded-2xl p-5 sm:p-6 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                            <h2 class="text-lg font-extrabold">My Orders</h2>
+                            <p class="text-xs" style="color: var(--text-sub);">Live history of orders placed on Usman SMM.</p>
+                        </div>
+                        <button type="button" onclick="switchView('new-order')" class="px-4 py-2 rounded-full bg-[#155eef] text-white text-xs font-bold cursor-pointer">
+                            + Place New Order
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b uppercase text-[11px]" style="border-color: var(--border-color); color: var(--text-sub);">
+                                    <th class="py-3 pr-3">ID</th>
+                                    <th class="py-3 px-3">Date</th>
+                                    <th class="py-3 px-3">Service</th>
+                                    <th class="py-3 px-3">Link</th>
+                                    <th class="py-3 px-3">Qty</th>
+                                    <th class="py-3 px-3">Charge</th>
+                                    <th class="py-3 pl-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myOrdersTableBody" class="divide-y" style="border-color: var(--border-color);"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===============================================================
+                 VIEW 4: REFILL
+                 =============================================================== -->
+            <section id="view-refill" class="view-section">
+                <div class="surface-card rounded-2xl p-6 max-w-xl space-y-4">
+                    <h2 class="text-lg font-extrabold">Request Order Refill</h2>
+                    <p class="text-xs" style="color: var(--text-sub);">Enter your Order ID for guaranteed refill-eligible services.</p>
+                    <input type="text" id="refillOrderIdInput" placeholder="e.g. ORD-5012" class="w-full px-3.5 py-2.5 rounded-xl border text-xs" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                    <button type="button" onclick="submitRefillRequest()" class="px-5 py-2.5 rounded-full bg-[#155eef] text-white text-xs font-bold cursor-pointer">
+                        Send Refill Request
+                    </button>
+                </div>
+            </section>
+
+            <!-- ===============================================================
+                 VIEW 5: ADD FUNDS
+                 =============================================================== -->
+            <section id="view-add-funds" class="view-section">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-5xl">
+                    <div class="lg:col-span-7 surface-card rounded-2xl p-6 space-y-4">
+                        <h2 class="text-lg font-extrabold">Add Funds to Usman SMM</h2>
+                        <div>
+                            <label class="block text-xs font-bold mb-1.5">Payment Method</label>
+                            <select id="depositMethodSelect" class="w-full px-3.5 py-2.5 rounded-xl border text-xs font-medium" style="background-color: var(--bg-surface); border-color: var(--border-color);">
+                                <option value="JazzCash / EasyPaisa (03028372072)">JazzCash / EasyPaisa (03028372072)</option>
+                                <option value="Bank Transfer (PKR)">Bank Transfer (PKR)</option>
+                                <option value="USDT TRC20 / Binance Pay">USDT TRC20 / Binance Pay</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold mb-1.5">Amount (Rs PKR)</label>
+                            <input type="number" id="depositAmountInput" value="500" min="50" class="w-full px-3.5 py-2.5 rounded-xl border text-xs font-bold" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold mb-1.5">Transaction ID / Sender Number</label>
+                            <input type="text" id="depositTrxInput" placeholder="TID / Reference number" class="w-full px-3.5 py-2.5 rounded-xl border text-xs" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                        </div>
+                        <button type="button" onclick="handleAddFunds()" class="w-full py-3 rounded-full bg-[#155eef] hover:bg-[#004eeb] text-white font-extrabold text-xs cursor-pointer">
+                            Add Funds &amp; Verify on WhatsApp
+                        </button>
+                    </div>
+                    <div class="lg:col-span-5 surface-card rounded-2xl p-6 space-y-3">
+                        <h3 class="font-extrabold text-sm">Deposit Instructions</h3>
+                        <p class="text-xs leading-relaxed" style="color: var(--text-sub);">
+                            1. Send funds via JazzCash or EasyPaisa to <strong class="text-[#155eef]">03028372072</strong>.<br>
+                            2. Enter the Transaction ID and amount on the left.<br>
+                            3. Your balance updates immediately in your local session and opens WhatsApp confirmation.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===============================================================
+                 VIEW 6: TRANSACTIONS
+                 =============================================================== -->
+            <section id="view-transactions" class="view-section">
+                <div class="surface-card rounded-2xl p-6 space-y-4">
+                    <h2 class="text-lg font-extrabold">Transactions Log</h2>
+                    <div id="transactionsListContainer" class="divide-y text-xs" style="border-color: var(--border-color);"></div>
+                </div>
+            </section>
+
+            <!-- ===============================================================
+                 VIEW 7: SERVICES CATALOG
+                 =============================================================== -->
+            <section id="view-services" class="view-section">
+                <div class="surface-card rounded-2xl p-6 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <h2 class="text-lg font-extrabold">Services Price List (Rs PKR per 1,000)</h2>
+                        <input type="text" id="catalogSearchInput" oninput="renderServicesCatalog()" placeholder="Filter services..." class="px-3.5 py-2 rounded-xl border text-xs sm:w-64" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b uppercase text-[11px]" style="border-color: var(--border-color); color: var(--text-sub);">
+                                    <th class="py-3 pr-3">ID</th>
+                                    <th class="py-3 px-3">Platform</th>
+                                    <th class="py-3 px-3">Service Name</th>
+                                    <th class="py-3 px-3">Rate / 1K</th>
+                                    <th class="py-3 px-3">Min / Max</th>
+                                    <th class="py-3 pl-3 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="catalogTableBody" class="divide-y" style="border-color: var(--border-color);"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===============================================================
+                 VIEW 8: UPDATES
+                 =============================================================== -->
+            <section id="view-updates" class="view-section">
+                <div class="surface-card rounded-2xl p-6 max-w-3xl space-y-4">
+                    <h2 class="text-lg font-extrabold">All Service Updates</h2>
+                    <div id="allUpdatesContainer" class="divide-y text-xs" style="border-color: var(--border-color);"></div>
+                </div>
+            </section>
+
+            <!-- ===============================================================
+                 VIEW 9: AI SUPPORT
+                 =============================================================== -->
+            <section id="view-ai-support" class="view-section">
+                <div class="surface-card rounded-2xl p-6 max-w-2xl space-y-4">
+                    <h2 class="text-lg font-extrabold flex items-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-[#155eef]"></i>
+                        <span>Usman SMM AI Assistant</span>
+                    </h2>
+                    <div id="aiChatMessages" class="h-64 overflow-y-auto p-3.5 rounded-xl border space-y-2.5 text-xs" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                        <div class="p-3 rounded-xl bg-[#155eef] text-white max-w-md">
+                            Assalam-o-Alaikum UsmanAmjad! Ask me about service rates, WhatsApp Channel 5K/10K/20K offers, or order tracking.
+                        </div>
+                    </div>
+                    <form onsubmit="event.preventDefault(); askAiAssistant();" class="flex gap-2">
+                        <input type="text" id="aiPromptInput" placeholder="Type your question..." class="flex-1 px-3.5 py-2.5 rounded-xl border text-xs" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-[#155eef] text-white font-bold text-xs cursor-pointer">Send</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- ===============================================================
+                 VIEW 10: TICKETS
+                 =============================================================== -->
+            <section id="view-tickets" class="view-section">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-5xl">
+                    <div class="lg:col-span-5 surface-card rounded-2xl p-5 space-y-3">
+                        <h2 class="text-base font-extrabold">Open Support Ticket</h2>
+                        <input type="text" id="ticketSubjectInput" placeholder="Subject (e.g. Order speed / Refill)" class="w-full px-3.5 py-2 rounded-xl border text-xs" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                        <textarea id="ticketBodyInput" rows="4" placeholder="Describe your issue or Order ID..." class="w-full p-3.5 rounded-xl border text-xs" style="background-color: var(--bg-muted); border-color: var(--border-color);"></textarea>
+                        <button type="button" onclick="createSupportTicket()" class="w-full py-2.5 rounded-full bg-[#155eef] text-white font-bold text-xs cursor-pointer">Submit Ticket</button>
+                    </div>
+                    <div class="lg:col-span-7 surface-card rounded-2xl p-5 space-y-3">
+                        <h3 class="text-base font-extrabold">Your Tickets</h3>
+                        <div id="ticketsListBox" class="divide-y text-xs" style="border-color: var(--border-color);"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===============================================================
+                 VIEW 11: FAQ / API / INVITE / CHILD PANELS / TERMS
+                 =============================================================== -->
+            <section id="view-faq" class="view-section">
+                <div class="surface-card rounded-2xl p-6 max-w-3xl space-y-3 text-xs">
+                    <h2 class="text-lg font-extrabold">Frequently Asked Questions</h2>
+                    <div class="p-3.5 rounded-xl border" style="border-color: var(--border-color);">
+                        <div class="font-bold">How fast do orders start?</div>
+                        <p class="mt-1" style="color: var(--text-sub);">Most orders start within 0–30 minutes after submission.</p>
+                    </div>
+                    <div class="p-3.5 rounded-xl border" style="border-color: var(--border-color);">
+                        <div class="font-bold">How do I add funds in PKR?</div>
+                        <p class="mt-1" style="color: var(--text-sub);">Use JazzCash / EasyPaisa (03028372072) under the Add Funds tab.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-api" class="view-section">
+                <div class="surface-card rounded-2xl p-6 max-w-3xl space-y-3 text-xs">
+                    <h2 class="text-lg font-extrabold">Developer API v2</h2>
+                    <p style="color: var(--text-sub);">Endpoint: <code>https://usmansmm.panel/api/v2</code></p>
+                    <div class="p-3 rounded-xl font-mono border" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                        API Key: usm_live_7866_923028372072_key
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-invite" class="view-section">
+                <div class="surface-card rounded-2xl p-6 max-w-2xl space-y-3 text-xs">
+                    <h2 class="text-lg font-extrabold">Invite &amp; Earn 5% Commission</h2>
+                    <p style="color: var(--text-sub);">Share your referral link and earn 5% on every friend's deposit.</p>
+                    <input type="text" readonly value="https://tiktok-shop-qcmh.vercel.app/?ref=UsmanAmjad" class="w-full px-3.5 py-2.5 rounded-xl border font-mono" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                </div>
+            </section>
+
+            <section id="view-child-panels" class="view-section">
+                <div class="surface-card rounded-2xl p-6 max-w-2xl space-y-3 text-xs">
+                    <h2 class="text-lg font-extrabold">Rent a Child Panel</h2>
+                    <p style="color: var(--text-sub);">Launch your own white-label SMM storefront connected to Usman SMM for Rs 2,500/month.</p>
+                    <a href="https://wa.me/923028372072?text=I%20want%20to%20order%20a%20Child%20Panel" target="_blank" class="inline-block px-5 py-2.5 rounded-full bg-[#155eef] text-white font-bold">Request on WhatsApp</a>
+                </div>
+            </section>
+
+            <section id="view-terms" class="view-section">
+                <div class="surface-card rounded-2xl p-6 max-w-3xl space-y-2 text-xs">
+                    <h2 class="text-lg font-extrabold">Terms of Service</h2>
+                    <p style="color: var(--text-sub);">Ensure target accounts and channels are set to public before submitting an order on Usman SMM.</p>
+                </div>
+            </section>
+
+            <!-- ===============================================================
+                 VIEW 12: ADMIN PANEL (PIN: 7866)
+                 =============================================================== -->
+            <section id="view-admin" class="view-section space-y-6">
+                <div class="surface-card rounded-2xl p-6 space-y-5">
+                    <div class="flex items-center justify-between border-b pb-3" style="border-color: var(--border-color);">
+                        <div>
+                            <h2 class="text-lg font-extrabold text-[#155eef]">Usman SMM — Admin Control Panel</h2>
+                            <p class="text-xs" style="color: var(--text-sub);">Manage balance, WhatsApp number, PIN, services, and order statuses.</p>
+                        </div>
+                        <button type="button" onclick="lockAdminSession()" class="px-3.5 py-1.5 rounded-full border text-xs font-bold hover:text-rose-500 cursor-pointer" style="border-color: var(--border-color);">
+                            Lock Admin
+                        </button>
+                    </div>
+
+                    <!-- Account & Balance Settings -->
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+                        <div>
+                            <label class="block font-bold mb-1">User Balance (Rs)</label>
+                            <input type="number" step="0.001" id="adminBalanceInput" class="w-full px-3 py-2 rounded-xl border" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                        </div>
+                        <div>
+                            <label class="block font-bold mb-1">WhatsApp Number</label>
+                            <input type="text" id="adminWhatsappInput" class="w-full px-3 py-2 rounded-xl border" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                        </div>
+                        <div>
+                            <label class="block font-bold mb-1">New 4-Digit PIN</label>
+                            <input type="password" id="adminPinInput" maxlength="4" inputmode="numeric" placeholder="7866" class="w-full px-3 py-2 rounded-xl border" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                        </div>
+                        <div class="flex items-end">
+                            <button type="button" onclick="saveAdminPanelSettings()" class="w-full py-2 px-4 rounded-xl bg-[#155eef] text-white font-bold cursor-pointer">
+                                Save Settings
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Add New Service -->
+                    <form onsubmit="addNewSmmService(event)" class="grid grid-cols-1 sm:grid-cols-6 gap-2.5 pt-3 border-t text-xs" style="border-color: var(--border-color);">
+                        <select id="adminNewPlatform" class="px-3 py-2 rounded-xl border" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                            <option value="Instagram">Instagram</option>
+                            <option value="TikTok">TikTok</option>
+                            <option value="YouTube">YouTube</option>
+                            <option value="Facebook">Facebook</option>
+                            <option value="Telegram">Telegram</option>
+                            <option value="WhatsApp">WhatsApp</option>
+                            <option value="X / Twitter">X / Twitter</option>
+                        </select>
+                        <input type="text" id="adminNewCategory" required placeholder="Category *" class="px-3 py-2 rounded-xl border" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                        <input type="text" id="adminNewServiceName" required placeholder="Service Title *" class="px-3 py-2 rounded-xl border" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                        <input type="number" step="0.001" id="adminNewRate" required placeholder="Rate / 1K (Rs) *" class="px-3 py-2 rounded-xl border" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                        <input type="number" id="adminNewMin" value="100" min="1" placeholder="Min Qty" class="px-3 py-2 rounded-xl border" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                        <button type="submit" class="py-2 px-4 rounded-xl bg-emerald-600 text-white font-bold cursor-pointer">+ Add Service</button>
+                    </form>
+
+                    <!-- Admin Orders Manager -->
+                    <div class="overflow-x-auto pt-2">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b uppercase text-[11px]" style="border-color: var(--border-color); color: var(--text-sub);">
+                                    <th class="py-2 pr-3">Order ID</th>
+                                    <th class="py-2 px-3">Service</th>
+                                    <th class="py-2 px-3">Qty</th>
+                                    <th class="py-2 px-3">Charge</th>
+                                    <th class="py-2 px-3">Status</th>
+                                    <th class="py-2 pl-3 text-right">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminOrdersTable" class="divide-y" style="border-color: var(--border-color);"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- PIN MODAL (DEFAULT PIN: 7866) -->
+    <div id="adminPinModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-[90] hidden flex items-center justify-center p-4">
+        <div class="surface-card rounded-2xl max-w-xs w-full p-6 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-extrabold text-base flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-[#155eef]"></i>
+                    <span>Admin Verification</span>
+                </h3>
+                <button type="button" onclick="closePinModal()" class="text-slate-400 hover:text-slate-600 cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <p class="text-xs" style="color: var(--text-sub);">Enter your 4-digit security PIN to access Admin Settings.</p>
+            <form onsubmit="verifyAdminPin(event)" class="space-y-3">
+                <input type="password" id="pinField" maxlength="4" inputmode="numeric" required placeholder="••••"
+                    class="w-full px-4 py-2.5 rounded-xl border text-center tracking-[0.5em] text-lg font-extrabold focus:outline-none focus:border-[#155eef]" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                <p id="pinErrorMsg" class="text-xs text-rose-500 text-center hidden">Incorrect PIN. Try again.</p>
+                <button type="submit" class="w-full py-2.5 rounded-full bg-[#155eef] hover:bg-[#004eeb] text-white font-bold text-xs cursor-pointer">
+                    Unlock Admin Panel
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST BANNER -->
+    <div id="usmanToast" class="fixed bottom-5 right-5 z-[110] hidden bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl text-xs font-semibold flex items-center gap-2">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="usmanToastText">Done</span>
+    </div>
+
+    <script>
+        /* =====================================================================
+           MOUSE-CLICK CIRCLE RIPPLE ANIMATION
+           ===================================================================== */
+        document.addEventListener("click", (e) => {
+            const circle = document.createElement("span");
+            circle.className = "usman-click-ripple";
+            circle.style.left = `${e.clientX}px`;
+            circle.style.top = `${e.clientY}px`;
+            document.body.appendChild(circle);
+            circle.addEventListener("animationend", () => circle.remove());
+        });
+
+        /* =====================================================================
+           STATE & INITIAL DATA (EXACT CATEGORIES & SERVICES FROM SCREENSHOTS)
+           ===================================================================== */
+        const KEYS = {
+            SERVICES: "usman_smm_services_v2",
+            ORDERS: "usman_smm_orders_v2",
+            TXNS: "usman_smm_txns_v2",
+            TICKETS: "usman_smm_tickets_v2",
+            CONFIG: "usman_smm_config_v2"
+        };
+
+        const PLATFORMS = [
+            { name: "All", icon: "fa-solid fa-border-all", color: "text-blue-600" },
+            { name: "Instagram", icon: "fa-brands fa-instagram", color: "text-pink-500" },
+            { name: "TikTok", icon: "fa-brands fa-tiktok", color: "text-slate-900 dark:text-white" },
+            { name: "YouTube", icon: "fa-brands fa-youtube", color: "text-red-600" },
+            { name: "Facebook", icon: "fa-brands fa-facebook", color: "text-blue-600" },
+            { name: "Telegram", icon: "fa-brands fa-telegram", color: "text-sky-500" },
+            { name: "X / Twitter", icon: "fa-brands fa-x-twitter", color: "text-slate-900 dark:text-white" },
+            { name: "WhatsApp", icon: "fa-brands fa-whatsapp", color: "text-emerald-500" },
+            { name: "Spotify", icon: "fa-brands fa-spotify", color: "text-green-500" },
+            { name: "Gemini", icon: "fa-solid fa-sparkles", color: "text-indigo-500" },
+            { name: "Canva", icon: "fa-solid fa-palette", color: "text-cyan-500" },
+            { name: "Others", icon: "fa-solid fa-ellipsis", color: "text-slate-500" }
+        ];
+
+        const PLATFORM_ICON_MAP = Object.fromEntries(PLATFORMS.map((p) => [p.name, p]));
+
+        const DEFAULT_SERVICES = [
+            // ================= 1. INSTAGRAM CATEGORIES (ALL 14) =================
+            { id: 301, platform: "Instagram", category: "🚪 Backend Instagram / Only for Api users ⭐", name: "Instagram API Backend Followers | Instant Start | Speed: 100K/Day |", subTag: "Lifetime Guarantee 🔥♻️⚡", ratePer1k: 82.500, min: 100, max: 1000000 },
+            { id: 302, platform: "Instagram", category: "Instagram - Recommended Services 🔥", name: "Instagram Real Mix Followers | Non-Drop | Speed: 50K/Day |", subTag: "365 Days Refill ♻️⚡", ratePer1k: 135.000, min: 50, max: 500000 },
+            { id: 303, platform: "Instagram", category: "Instagram - Followers [Cheapest]", name: "Instagram Followers [Cheapest] | Fast Start | Speed: 30K/Day |", subTag: "30 Days Refill ♻️", ratePer1k: 74.200, min: 50, max: 1000000 },
+            { id: 304, platform: "Instagram", category: "Instagram Repost 🔁", name: "Instagram Post / Reel Reposts | Instant Start | Speed: 20K/Day |", subTag: "Lifetime Guarantee ⚡", ratePer1k: 45.000, min: 20, max: 200000 },
+            { id: 305, platform: "Instagram", category: "Instagram - Saves", name: "Instagram Post & Reel Saves | Real Accounts | Speed: 50K/Day |", subTag: "Lifetime Guarantee 🔥", ratePer1k: 12.800, min: 50, max: 500000 },
+            { id: 306, platform: "Instagram", category: "Instagram - Shares ↪️", name: "Instagram Post & Reel Shares | Viral Boost | Speed: 100K/Day |", subTag: "Instant Start ⚡", ratePer1k: 14.500, min: 50, max: 1000000 },
+            { id: 307, platform: "Instagram", category: "Instagram - Likes [ Cheap ]", name: "Instagram Likes [ Cheap ] | Instant Start | Speed: 50K/Day |", subTag: "No Refill ⚡", ratePer1k: 11.400, min: 20, max: 500000 },
+            { id: 308, platform: "Instagram", category: "Instagram - Reach + Impressions + Profile Visits", name: "Instagram Reach + Impressions + Profile Visits | Insights Boost |", subTag: "Lifetime Guarantee 🔥", ratePer1k: 18.900, min: 100, max: 1000000 },
+            { id: 309, platform: "Instagram", category: "Instagram - Comments 💬 (Custom)", name: "Instagram Custom Comments 💬 | Real Profiles | Fast Start |", subTag: "High Quality 🔥", ratePer1k: 290.000, min: 10, max: 50000 },
+            { id: 310, platform: "Instagram", category: "Instagram - Comments 💬 🌍 (Random)", name: "Instagram Random Positive Comments 💬 🌍 | Instant Start |", subTag: "Global Mix ⚡", ratePer1k: 165.000, min: 10, max: 50000 },
+            { id: 311, platform: "Instagram", category: "Instagram - Story Services 🌄", name: "Instagram All Stories Views + Poll Votes 🌄 | Instant Start |", subTag: "Speed: 50K/Day ⚡", ratePer1k: 19.500, min: 50, max: 200000 },
+            { id: 312, platform: "Instagram", category: "Instagram - Likes + Views [ 🇮🇳 India ]", name: "Instagram Reels Likes + Views [ 🇮🇳 India Real ] | Fast Start |", subTag: "30 Days Refill ♻️", ratePer1k: 48.000, min: 50, max: 500000 },
+            { id: 313, platform: "Instagram", category: "Instagram - Likes + Views [ 🇵🇰 Pakistan ]", name: "Instagram Reels Likes + Views [ 🇵🇰 Pakistan Real ] | Fast Start |", subTag: "Lifetime Guarantee 🔥⚡", ratePer1k: 54.000, min: 50, max: 500000 },
+            { id: 314, platform: "Instagram", category: "Instagram - Likes + Views [ 🇸🇦 Saudi Arabia ]", name: "Instagram Reels Likes + Views [ 🇸🇦 Saudi Arabia Arab ] | Fast Start |", subTag: "30 Days Refill ♻️", ratePer1k: 62.500, min: 50, max: 500000 },
+
+            // ================= 2. TIKTOK CATEGORIES (ALL 15 + EXACT SCREENSHOT SERVICES) =================
+            { id: 468, platform: "TikTok", category: "Tiktok Sponsor Ads | Own Services ⭐", name: "TikTok Sponsored Ads Views | Mini: 100K | Real Ads 🇵🇰 | Fast Start | Analytics Guaranteed |", subTag: "Lifetime Guarantee 🔥♻️⚡", ratePer1k: 55.680, min: 100000, max: 10000000 },
+            { id: 469, platform: "TikTok", category: "Tiktok Sponsor Ads | Own Services ⭐", name: "TikTok Sponsored Ads Views | Mini: 50K | Real Ads 🇵🇰 | Fast Start | Analytics Guaranteed |", subTag: "Lifetime Guarantee 🔥♻️⚡", ratePer1k: 62.500, min: 50000, max: 10000000 },
+            { id: 470, platform: "TikTok", category: "Tiktok Sponsor Ads | Own Services ⭐", name: "TikTok Sponsored Ads Views | Mini: 20K | Real Ads 🇵🇰 | Fast Start | Analytics Guaranteed |", subTag: "Lifetime Guarantee 🔥♻️⚡", ratePer1k: 77.500, min: 20000, max: 10000000 },
+            { id: 471, platform: "TikTok", category: "Tiktok Sponsor Ads | Own Services ⭐", name: "TikTok Sponsored Ads Views | Mini: 10K | Real Ads 🇵🇰 | Fast Start | Analytics Guaranteed |", subTag: "Lifetime Guarantee 🔥♻️⚡", ratePer1k: 80.000, min: 10000, max: 10000000 },
+            { id: 472, platform: "TikTok", category: "Tiktok Sponsor Ads | Own Services ⭐", name: "TikTok Sponsored Ads Views | Mini: 5K | Real Ads 🇵🇰 | Fast Start | Analytics Guaranteed |", subTag: "Lifetime Guarantee 🔥♻️⚡", ratePer1k: 97.500, min: 5000, max: 10000000 },
+            { id: 473, platform: "TikTok", category: "Tiktok Sponsor Ads | Own Services ⭐", name: "TikTok Sponsored Ads Views | Mini: 2K | Real Ads 🇵🇰 | Fast Start | Analytics Guaranteed |", subTag: "Lifetime Guarantee 🔥♻️⚡", ratePer1k: 112.500, min: 2000, max: 10000000 },
+            { id: 480, platform: "TikTok", category: "TikTok - Recommended Services 🔥", name: "TikTok Viral ForYou Package [Views + Likes + Shares] | Super Fast |", subTag: "Lifetime Guarantee 🔥⚡", ratePer1k: 34.000, min: 100, max: 5000000 },
+            { id: 481, platform: "TikTok", category: "TikTok - Likes Organic [ For You Ads ⚡ ]", name: "TikTok Organic Likes [ For You Ads ⚡ ] | Real Active Users |", subTag: "Lifetime Guarantee 🔥♻️", ratePer1k: 68.000, min: 50, max: 500000 },
+            { id: 482, platform: "TikTok", category: "TikTok - Views [Ultra Fast]", name: "TikTok Video Views [Ultra Fast] | Speed: 1M+/Day | Instant Start |", subTag: "Lifetime Guarantee ⚡", ratePer1k: 3.450, min: 100, max: 10000000 },
+            { id: 483, platform: "TikTok", category: "TikTok - Views [ Sponsor Ads 🤑 - Monetizable 💲 ]", name: "TikTok Monetizable Ad Views [ Sponsor Ads 🤑 ] | RPM Safe |", subTag: "Analytics Guaranteed 🔥", ratePer1k: 89.000, min: 1000, max: 5000000 },
+            { id: 484, platform: "TikTok", category: "TikTok - Pakistan Services 🇵🇰", name: "TikTok 100% Pakistani Real Followers + Likes 🇵🇰 | Fast Start |", subTag: "30 Days Refill ♻️⚡", ratePer1k: 310.000, min: 50, max: 200000 },
+            { id: 485, platform: "TikTok", category: "TikTok - Likes [VIP with Notification]", name: "TikTok VIP Likes [With App Notification] | Real Profiles |", subTag: "Lifetime Guarantee 🔥", ratePer1k: 79.500, min: 50, max: 500000 },
+            { id: 486, platform: "TikTok", category: "TikTok - Likes [ HQ | Super Fast ]", name: "TikTok Likes [ HQ | Super Fast ] | Speed: 100K/Day |", subTag: "30 Days Refill ♻️⚡", ratePer1k: 38.200, min: 50, max: 1000000 },
+            { id: 487, platform: "TikTok", category: "TikTok - Likes [ Fast ⚡ ]", name: "TikTok Likes [ Fast ⚡ ] | Instant Start | Low Drop |", subTag: "Fast Delivery ⚡", ratePer1k: 26.800, min: 20, max: 1000000 },
+            { id: 488, platform: "TikTok", category: "TikTok Followers (Cheapest)", name: "TikTok Followers (Cheapest) | Smooth Delivery | Speed: 20K/Day |", subTag: "30 Days Refill ♻️", ratePer1k: 245.000, min: 50, max: 500000 },
+            { id: 489, platform: "TikTok", category: "TikTok - Followers [Fast]", name: "TikTok Followers [Fast] | High Quality Profiles | Speed: 50K/Day |", subTag: "Lifetime Guarantee 🔥♻️", ratePer1k: 335.000, min: 50, max: 500000 },
+            { id: 490, platform: "TikTok", category: "TikTok - Comments 💬", name: "TikTok Custom / Emoji Comments 💬 | Real Accounts | Fast Start |", subTag: "High Retention 🔥", ratePer1k: 260.000, min: 10, max: 50000 },
+            { id: 491, platform: "TikTok", category: "TikTok - Saves", name: "TikTok Video Favorites / Saves | Algorithm Boost | Instant Start |", subTag: "Lifetime Guarantee ⚡", ratePer1k: 14.200, min: 50, max: 1000000 },
+            { id: 492, platform: "TikTok", category: "TikTok - Video Shares", name: "TikTok Video Shares | Instant Viral Push | Speed: 500K/Day |", subTag: "Lifetime Guarantee ⚡", ratePer1k: 9.800, min: 50, max: 2000000 },
+            { id: 493, platform: "TikTok", category: "TikTok - Pak Battle Points", name: "TikTok Live PK Battle Points 🇵🇰 | Instant Tap Support |", subTag: "Live Instant ⚡", ratePer1k: 185.000, min: 100, max: 500000 },
+
+            // ================= 3. YOUTUBE CATEGORIES (ALL 15 + EXACT SCREENSHOT SERVICES) =================
+            { id: 960, platform: "YouTube", category: "YouTube Adword Views | WorldWide (WW) Skip | Own Services ⭐", name: "Youtube Adword Views Organic Mini: 5k ( WW Skip ) Video Length Under 4 mins |", subTag: "Super Fast 🔥", ratePer1k: 195.000, min: 5000, max: 5000000 },
+            { id: 961, platform: "YouTube", category: "YouTube Adword Views | WorldWide (WW) Skip | Own Services ⭐", name: "Youtube Adword Views Organic Mini: 10k ( WW Skip ) Video Length Under 4 mins |", subTag: "Super Fast 🔥", ratePer1k: 156.000, min: 10000, max: 5000000 },
+            { id: 896, platform: "YouTube", category: "YouTube Adword Views | WorldWide (WW) Skip | Own Services ⭐", name: "Youtube Adword Views Organic Mini: 25k ( WW Skip ) Video Length Under 4 mins |", subTag: "Super Fast 🔥", ratePer1k: 110.040, min: 25000, max: 5000000 },
+            { id: 897, platform: "YouTube", category: "YouTube Adword Views | WorldWide (WW) Skip | Own Services ⭐", name: "Youtube Adword Views Organic Mini: 50k ( WW Skip ) Video Length Under 4 mins |", subTag: "Super Fast 🔥", ratePer1k: 79.800, min: 50000, max: 5000000 },
+            { id: 898, platform: "YouTube", category: "YouTube Adword Views | WorldWide (WW) Skip | Own Services ⭐", name: "Youtube Adword Views Organic Mini: 100k ( WW Skip ) Video Length Under 4 mins |", subTag: "Super Fast 🔥", ratePer1k: 73.080, min: 100000, max: 5000000 },
+            { id: 899, platform: "YouTube", category: "YouTube Adword Views | WorldWide (WW) Skip | Own Services ⭐", name: "Youtube Adword Views Organic Mini: 500k ( WW Skip ) Video Length Under 4 mins |", subTag: "Super Fast 🔥", ratePer1k: 55.200, min: 500000, max: 10000000 },
+            { id: 910, platform: "YouTube", category: "YouTube Adword Views [Under 8 - 60 Mins] | Own Services ⭐", name: "YouTube Adword Long Video Views [8 - 60 Mins] | High Retention |", subTag: "Google Ads Certified 🔥", ratePer1k: 215.000, min: 5000, max: 2000000 },
+            { id: 911, platform: "YouTube", category: "YouTube Adword Views | PAK 🇵🇰 | Own Services ⭐", name: "YouTube Adword Real Views | PAK 🇵🇰 Targeted | Monetizable Safe |", subTag: "Super Fast 🔥", ratePer1k: 185.000, min: 5000, max: 2000000 },
+            { id: 912, platform: "YouTube", category: "YouTube Adword Views | INDIA 🇮🇳 | Own Services ⭐", name: "YouTube Adword Real Views | INDIA 🇮🇳 Targeted | High Retention |", subTag: "Super Fast 🔥", ratePer1k: 165.000, min: 5000, max: 5000000 },
+            { id: 913, platform: "YouTube", category: "YouTube Adword Views | Turkey 🇹🇷 | Own Services ⭐", name: "YouTube Adword Real Views | Turkey 🇹🇷 Targeted | Google Ads |", subTag: "Super Fast 🔥", ratePer1k: 175.000, min: 5000, max: 2000000 },
+            { id: 914, platform: "YouTube", category: "YouTube Adword Views | Nepal 🇳🇵 | Own Services ⭐", name: "YouTube Adword Real Views | Nepal 🇳🇵 Targeted | Google Ads |", subTag: "Super Fast 🔥", ratePer1k: 170.000, min: 5000, max: 2000000 },
+            { id: 915, platform: "YouTube", category: "YouTube Adword Views | Arab 🇦🇪 | Own Services ⭐", name: "YouTube Adword Real Views | Arab UAE/KSA 🇦🇪 Targeted | Premium |", subTag: "Super Fast 🔥", ratePer1k: 245.000, min: 5000, max: 2000000 },
+            { id: 916, platform: "YouTube", category: "YouTube - Recommended Services 🔥", name: "YouTube High Retention Views + Watch Hours Pack | Monetization Ready |", subTag: "Lifetime Guarantee 🔥♻️", ratePer1k: 148.000, min: 500, max: 1000000 },
+            { id: 917, platform: "YouTube", category: "YouTube Views - [ Refill ✅ ]", name: "YouTube Non-Drop Views [ Refill ✅ ] | Speed: 30K/Day |", subTag: "Lifetime Refill ✅", ratePer1k: 125.000, min: 100, max: 2000000 },
+            { id: 918, platform: "YouTube", category: "YouTube - Likes [Cheap Working]", name: "YouTube Video Likes [Cheap Working] | Fast Start |", subTag: "30 Days Refill ♻️", ratePer1k: 49.000, min: 20, max: 500000 },
+            { id: 919, platform: "YouTube", category: "YouTube - Likes [Fast ⚡ ]", name: "YouTube Video Likes [Fast ⚡ ] | Speed: 50K/Day | Non-Drop |", subTag: "Lifetime Guarantee ⚡", ratePer1k: 68.500, min: 20, max: 500000 },
+            { id: 920, platform: "YouTube", category: "YouTube - Comments Likes", name: "YouTube Top Comment Likes | Pin Comment Ranker | Instant Start |", subTag: "Fast Delivery ⚡", ratePer1k: 95.000, min: 10, max: 100000 },
+            { id: 921, platform: "YouTube", category: "YouTube Livestream | 100% Concurrent Viewers", name: "YouTube Livestream Concurrent Viewers [60 Mins] | Instant Start |", subTag: "100% Concurrent 🔥", ratePer1k: 320.000, min: 50, max: 50000 },
+            { id: 922, platform: "YouTube", category: "YouTube - Comments 💬 Random", name: "YouTube Random Positive Comments 💬 | Real Channels |", subTag: "Non-Drop ✅", ratePer1k: 210.000, min: 10, max: 20000 },
+            { id: 923, platform: "YouTube", category: "YouTube - comments 💬 Custom", name: "YouTube Custom Comments 💬 | Write Your Own Text |", subTag: "Real Channels 🔥", ratePer1k: 310.000, min: 10, max: 20000 },
+
+            // ================= 4. OTHER PLATFORMS (FACEBOOK, WHATSAPP, TELEGRAM, X, ETC.) =================
+            { id: 968, platform: "Facebook", category: "Facebook Followers | Cheapest NEW", name: "Facebook Followers | All type Page/Profile | Speed: 30k+/Day | Speed: 0-30 Mins |", subTag: "No Refill ⚡", ratePer1k: 39.6035, min: 10, max: 1000000 },
+            { id: 1310, platform: "WhatsApp", category: "WhatsApp Channel Members Promo ⭐", name: "WhatsApp Channel Original Members | 5K Rs 1000 | 10K Rs 2000 | 20K Rs 4500 |", subTag: "Guaranteed Original 🔥", ratePer1k: 200.000, min: 5000, max: 50000 },
+            { id: 1401, platform: "Telegram", category: "Telegram Channel Members", name: "Telegram Channel / Group Members | Fast Start | Low Drop |", subTag: "30 Days Refill ♻️", ratePer1k: 145.000, min: 100, max: 200000 },
+            { id: 536, platform: "X / Twitter", category: "Twitter / X Poll Votes & Engagement", name: "Twitter - Poll Votes - [ Start: 0-3H | Speed: 5K/D | SR-LT ] -", subTag: "Lifetime Guaranteed 🔥", ratePer1k: 15.9315, min: 20, max: 50000 },
+            { id: 1501, platform: "Spotify", category: "Spotify Plays & Followers", name: "Spotify Track Plays | Global Mix | Fast Start |", subTag: "Royalty Eligible ⚡", ratePer1k: 85.000, min: 500, max: 500000 },
+            { id: 1601, platform: "Canva", category: "Canva Pro Subscriptions", name: "Canva Pro Full Access | 1 Year Warranty | Instant Activation |", subTag: "Official Invite ⭐", ratePer1k: 250.000, min: 1000, max: 1000 },
+            { id: 1701, platform: "Gemini", category: "Gemini AI Tools & Automation", name: "Gemini Advanced Prompt & Automation Suite |", subTag: "Instant Delivery ⚡", ratePer1k: 300.000, min: 1000, max: 1000 },
+            { id: 1801, platform: "Others", category: "Website Traffic | Direct", name: "Worldwide Targeted Web Visitors | 24h Delivery |", subTag: "Analytics Safe ✅", ratePer1k: 25.000, min: 500, max: 1000000 }
+        ];
+
+        const SERVICE_UPDATES = [
+            { date: "2026-11-27", text: "468 - TikTok Sponsored Ads Views | Mini: 100K | Real Ads 🇵🇰 | Analytics Guaranteed", change: "Rate ACTIVE at Rs 55.680 /1K", positive: true },
+            { date: "2026-11-27", text: "960 - Youtube Adword Views Organic Mini: 5k ( WW Skip ) | Super Fast 🔥", change: "Rate ACTIVE at Rs 195.000 /1K", positive: true },
+            { date: "2026-11-27", text: "536 - Twitter - Poll Votes - [ Start: 0-3H | Speed: 5K/D | SR-LT ] - Lifetime Guaranteed", change: "Price DECREASED to 0.159315", positive: true },
+            { date: "2026-11-27", text: "1310 - WhatsApp Channel Original Members [ 5K Rs 1000 | 10K Rs 2000 | 20K Rs 4500 ]", change: "Limited Time Offer LIVE", positive: true }
+        ];
+
+        function loadJson(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : fallback;
+            } catch (e) {
+                return fallback;
+            }
+        }
+
+        let services = loadJson(KEYS.SERVICES, DEFAULT_SERVICES);
+        let orders = loadJson(KEYS.ORDERS, []);
+        let txns = loadJson(KEYS.TXNS, [
+            { id: "TX-1001", date: "2026-11-27", method: "JazzCash (03028372072)", amount: 1.362, status: "Completed" }
+        ]);
+        let tickets = loadJson(KEYS.TICKETS, []);
+        let config = loadJson(KEYS.CONFIG, {
+            balance: 1.362,
+            whatsapp: "923028372072",
+            pin: "7866"
+        });
+
+        let selectedPlatform = "TikTok";
+        let isAdminUnlocked = false;
+
+        function persistState() {
+            localStorage.setItem(KEYS.SERVICES, JSON.stringify(services));
+            localStorage.setItem(KEYS.ORDERS, JSON.stringify(orders));
+            localStorage.setItem(KEYS.TXNS, JSON.stringify(txns));
+            localStorage.setItem(KEYS.TICKETS, JSON.stringify(tickets));
+            localStorage.setItem(KEYS.CONFIG, JSON.stringify(config));
+        }
+
+        function showToast(msg) {
+            const el = document.getElementById("usmanToast");
+            document.getElementById("usmanToastText").textContent = msg;
+            el.classList.remove("hidden");
+            clearTimeout(window.__usmanToastTimer);
+            window.__usmanToastTimer = setTimeout(() => el.classList.add("hidden"), 2800);
+        }
+
+        /* =====================================================================
+           NAVIGATION, THEME & HEADER CONTROLS
+           ===================================================================== */
+        function toggleMobileSidebar(open) {
+            const sb = document.getElementById("leftSidebar");
+            const bd = document.getElementById("mobileSidebarBackdrop");
+            sb.classList.toggle("-translate-x-full", !open);
+            bd.classList.toggle("hidden", !open);
+        }
+
+        function toggleUserDropdown(force) {
+            const menu = document.getElementById("userProfileDropdown");
+            const show = typeof force === "boolean" ? force : menu.classList.contains("hidden");
+            menu.classList.toggle("hidden", !show);
+        }
+
+        function toggleThemeMode() {
+            const isDark = document.documentElement.classList.toggle("dark");
+            document.getElementById("themeToggleIcon").className = isDark ? "fa-solid fa-sun text-xs text-amber-400" : "fa-solid fa-moon text-xs";
+        }
+
+        function toggleLanguagePill() {
+            const el = document.getElementById("langPillLabel");
+            el.textContent = el.textContent === "EN" ? "UR" : "EN";
+            showToast(`Language: ${el.textContent}`);
+        }
+
+        function toggleCurrencyPill() {
+            const el = document.getElementById("currencyPillLabel");
+            el.textContent = el.textContent === "Rs PKR" ? "$ USD" : "Rs PKR";
+            showToast(`Currency: ${el.textContent}`);
+        }
+
+        const VIEW_TITLES = {
+            "new-order": "New Order",
+            "bulk-orders": "Bulk Orders",
+            "my-orders": "My Orders",
+            "refill": "Refill",
+            "add-funds": "Add Funds",
+            "transactions": "Transactions",
+            "services": "Services",
+            "updates": "Updates",
+            "ai-support": "AI Support",
+            "tickets": "Tickets",
+            "faq": "FAQ",
+            "api": "API",
+            "invite": "Invite & Earn",
+            "child-panels": "Child Panels",
+            "terms": "Terms",
+            "admin": "Admin Panel"
+        };
+
+        function switchView(viewId) {
+            document.querySelectorAll(".view-section").forEach((sec) => sec.classList.remove("active"));
+            const target = document.getElementById(`view-${viewId}`);
+            if (target) {
+                void target.offsetWidth;
+                target.classList.add("active");
+            }
+
+            document.getElementById("topHeaderTitle").textContent = VIEW_TITLES[viewId] || "Usman SMM";
+
+            document.querySelectorAll(".sidebar-nav-btn").forEach((btn) => {
+                const active = btn.dataset.view === viewId;
+                if (active) {
+                    btn.className = "sidebar-nav-btn w-full px-3 py-2 rounded-xl font-semibold flex items-center justify-between bg-blue-50 text-[#155eef] dark:bg-blue-950/60 dark:text-blue-400 cursor-pointer";
+                    btn.style.color = "";
+                } else {
+                    btn.className = "sidebar-nav-btn w-full px-3 py-2 rounded-xl font-medium flex items-center justify-between hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer";
+                    btn.style.color = "var(--text-sub)";
+                }
+            });
+
+            toggleMobileSidebar(false);
+            if (viewId === "my-orders") renderMyOrdersTable();
+            if (viewId === "transactions") renderTransactionsList();
+            if (viewId === "services") renderServicesCatalog();
+            if (viewId === "tickets") renderTicketsList();
+            if (viewId === "admin") renderAdminPanel();
+        }
+
+        function switchOrderSubTab(tab) {
+            const sBtn = document.getElementById("orderCardTab-single");
+            const mBtn = document.getElementById("orderCardTab-mass");
+            const sPane = document.getElementById("subtab-single");
+            const mPane = document.getElementById("subtab-mass");
+
+            if (tab === "single") {
+                sBtn.className = "py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#155eef] text-white shadow-xs transition cursor-pointer";
+                mBtn.className = "py-2.5 rounded-xl text-xs sm:text-sm font-semibold hover:bg-white/60 dark:hover:bg-slate-800 transition cursor-pointer";
+                mBtn.style.color = "var(--text-sub)";
+                sPane.classList.add("active");
+                mPane.classList.remove("active");
+            } else {
+                mBtn.className = "py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#155eef] text-white shadow-xs transition cursor-pointer";
+                sBtn.className = "py-2.5 rounded-xl text-xs sm:text-sm font-semibold hover:bg-white/60 dark:hover:bg-slate-800 transition cursor-pointer";
+                sBtn.style.color = "var(--text-sub)";
+                mPane.classList.add("active");
+                sPane.classList.remove("active");
+            }
+        }
+
+        /* =====================================================================
+           CUSTOM CATEGORY & SERVICE DROPDOWNS + LIVE CHARGE CALCULATOR
+           ===================================================================== */
+        function toggleCustomDropdown(type) {
+            const catMenu = document.getElementById("categoryDropdownMenu");
+            const srvMenu = document.getElementById("serviceDropdownMenu");
+            if (type === "category") {
+                const willOpen = catMenu.classList.contains("hidden");
+                srvMenu.classList.add("hidden");
+                catMenu.classList.toggle("hidden", !willOpen);
+            } else {
+                const willOpen = srvMenu.classList.contains("hidden");
+                catMenu.classList.add("hidden");
+                srvMenu.classList.toggle("hidden", !willOpen);
+            }
+        }
+
+        document.addEventListener("click", (e) => {
+            if (!e.target.closest("#categoryDropdownWrapper")) {
+                document.getElementById("categoryDropdownMenu")?.classList.add("hidden");
+            }
+            if (!e.target.closest("#serviceDropdownWrapper")) {
+                document.getElementById("serviceDropdownMenu")?.classList.add("hidden");
+            }
+        });
+
+        function renderPlatformPills() {
+            const container = document.getElementById("platformPillsContainer");
+            container.innerHTML = PLATFORMS.map((p) => {
+                const isSelected = p.name === selectedPlatform;
+                const cls = isSelected
+                    ? "bg-[#155eef] text-white border-[#155eef] shadow-xs"
+                    : "border hover:border-[#155eef]";
+                const iconColor = isSelected ? "text-white" : p.color;
+                return `
+                    <button type="button" onclick="selectPlatform('${p.name}')"
+                        class="px-3 py-1.5 rounded-full border text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer ${cls}"
+                        style="${!isSelected ? "background-color: var(--bg-surface); border-color: var(--border-color);" : ""}">
+                        <i class="${p.icon} ${iconColor}"></i>
+                        <span>${p.name}</span>
+                    </button>
+                `;
+            }).join("");
+        }
+
+        function selectPlatform(platformName) {
+            selectedPlatform = platformName;
+            renderPlatformPills();
+            filterCategoriesAndServices();
+        }
+
+        function getFilteredServices() {
+            const query = (document.getElementById("serviceSearchInput").value || "").toLowerCase().trim();
+            return services.filter((s) => {
+                const matchPlat = selectedPlatform === "All" || s.platform === selectedPlatform;
+                const matchSearch = !query ||
+                    String(s.id).includes(query) ||
+                    s.category.toLowerCase().includes(query) ||
+                    s.name.toLowerCase().includes(query);
+                return matchPlat && matchSearch;
+            });
+        }
+
+        function filterCategoriesAndServices(preferredCategory) {
+            const matching = getFilteredServices();
+            const catInput = document.getElementById("categorySelect");
+            const catMenu = document.getElementById("categoryDropdownMenu");
+            const uniqueCats = [...new Set(matching.map((s) => s.category))];
+
+            if (!uniqueCats.length) {
+                catInput.value = "";
+                document.getElementById("categoryTriggerText").textContent = "No matching categories";
+                catMenu.innerHTML = `<div class="p-4 text-xs text-center" style="color: var(--text-sub);">No matching categories</div>`;
+                document.getElementById("serviceSelect").value = "";
+                document.getElementById("serviceTriggerText").textContent = "No matching services";
+                document.getElementById("serviceDropdownMenu").innerHTML = "";
+                return;
+            }
+
+            const activeCat = (preferredCategory && uniqueCats.includes(preferredCategory)) ? preferredCategory : uniqueCats[0];
+            catInput.value = activeCat;
+
+            catMenu.innerHTML = uniqueCats.map((cat) => {
+                const sample = matching.find((s) => s.category === cat) || { platform: "Others" };
+                const pMeta = PLATFORM_ICON_MAP[sample.platform] || PLATFORM_ICON_MAP["Others"];
+                const isSel = cat === activeCat;
+                return `
+                    <button type="button" data-cat="${encodeURIComponent(cat)}" onclick="chooseCategoryFromMenu(decodeURIComponent(this.dataset.cat))"
+                        class="custom-dd-item w-full px-3.5 py-2.5 text-left flex items-center gap-3 text-xs sm:text-sm cursor-pointer ${isSel ? "selected" : ""}">
+                        <span class="w-7 h-7 rounded-lg border flex items-center justify-center shrink-0" style="border-color: var(--border-color); background-color: var(--bg-surface);">
+                            <i class="${pMeta.icon} ${pMeta.color} text-xs"></i>
+                        </span>
+                        <span class="font-medium leading-snug ${isSel ? "text-[#155eef] font-bold" : ""}">${cat}</span>
+                    </button>
+                `;
+            }).join("");
+
+            const activeSample = matching.find((s) => s.category === activeCat) || { platform: "Others" };
+            const activeMeta = PLATFORM_ICON_MAP[activeSample.platform] || PLATFORM_ICON_MAP["Others"];
+            document.getElementById("categoryTriggerIcon").innerHTML = `<i class="${activeMeta.icon} ${activeMeta.color} text-xs"></i>`;
+            document.getElementById("categoryTriggerText").textContent = activeCat;
+
+            populateServicesDropdown();
+        }
+
+        function chooseCategoryFromMenu(catName) {
+            document.getElementById("categoryDropdownMenu").classList.add("hidden");
+            filterCategoriesAndServices(catName);
+        }
+
+        function populateServicesDropdown(preferredServiceId) {
+            const selectedCat = document.getElementById("categorySelect").value;
+            const matching = getFilteredServices().filter((s) => s.category === selectedCat);
+            const srvInput = document.getElementById("serviceSelect");
+            const srvMenu = document.getElementById("serviceDropdownMenu");
+
+            if (!matching.length) {
+                srvInput.value = "";
+                srvMenu.innerHTML = "";
+                return;
+            }
+
+            const activeSrv = matching.find((s) => s.id === Number(preferredServiceId)) || matching[0];
+            srvInput.value = activeSrv.id;
+
+            srvMenu.innerHTML = matching.map((s) => {
+                const isSel = s.id === activeSrv.id;
+                return `
+                    <button type="button" onclick="chooseServiceFromMenu(${s.id})"
+                        class="custom-dd-item w-full px-3.5 py-3 text-left flex items-center justify-between gap-3 text-xs cursor-pointer ${isSel ? "selected" : ""}">
+                        <div class="flex items-start gap-2.5 min-w-0 flex-1">
+                            <span class="px-2.5 py-0.5 rounded-full bg-[#155eef] text-white text-[11px] font-extrabold shrink-0 mt-0.5">Id-${s.id}</span>
+                            <div class="leading-snug ${isSel ? "text-[#155eef] font-semibold" : ""}">
+                                <span>${s.name}</span>
+                                ${s.subTag ? `<span class="block italic font-bold mt-0.5">${s.subTag}</span>` : ""}
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full bg-blue-50 text-[#155eef] dark:bg-blue-950 dark:text-blue-300 text-[11px] font-extrabold shrink-0">
+                            Rs${Number(s.ratePer1k).toFixed(3)} /1K
+                        </span>
+                    </button>
+                `;
+            }).join("");
+
+            onServiceChanged();
+        }
+
+        function chooseServiceFromMenu(serviceId) {
+            document.getElementById("serviceDropdownMenu").classList.add("hidden");
+            populateServicesDropdown(serviceId);
+        }
+
+        function onServiceChanged() {
+            const srvId = Number(document.getElementById("serviceSelect").value);
+            const srv = services.find((s) => s.id === srvId) || services[0];
+            if (!srv) return;
+
+            document.getElementById("serviceTriggerIdPill").textContent = `Id-${srv.id}`;
+            document.getElementById("serviceTriggerText").textContent = `${srv.name} ${srv.subTag || ""}`.trim();
+            document.getElementById("serviceTriggerRatePill").textContent = `Rs${Number(srv.ratePer1k).toFixed(3)} /1K`;
+
+            document.getElementById("selectedServiceBadge").innerHTML = `
+                <span class="px-2 py-0.5 rounded-full bg-[#155eef] text-white">Id-${srv.id}</span>
+                <span class="px-2 py-0.5 rounded-full bg-blue-50 text-[#155eef] dark:bg-blue-950 dark:text-blue-300">Rs${Number(srv.ratePer1k).toFixed(3)} /1K</span>
+            `;
+
+            const qtyInput = document.getElementById("orderQuantityInput");
+            qtyInput.min = srv.min;
+            qtyInput.max = srv.max;
+            qtyInput.value = srv.min;
+            document.getElementById("qtyMinMaxHelper").textContent = `Min: ${srv.min}   Max: ${srv.max}`;
+
+            recalculateCharge();
+        }
+
+        function recalculateCharge() {
+            const srvId = Number(document.getElementById("serviceSelect").value);
+            const srv = services.find((s) => s.id === srvId) || services[0];
+            if (!srv) return;
+            const qty = Math.max(0, Number(document.getElementById("orderQuantityInput").value) || 0);
+            const charge = (qty / 1000) * Number(srv.ratePer1k);
+            document.getElementById("liveChargeDisplay").textContent = `Rs ${charge.toFixed(4)}`;
+        }
+
+        /* =====================================================================
+           ORDER SUBMISSION, MASS ORDERS & WHATSAPP ROUTING
+           ===================================================================== */
+        function handleSingleOrderSubmit() {
+            const srvId = Number(document.getElementById("serviceSelect").value);
+            const srv = services.find((s) => s.id === srvId);
+            const link = document.getElementById("orderLinkInput").value.trim();
+            const qty = Number(document.getElementById("orderQuantityInput").value || 0);
+
+            if (!srv || !link) {
+                showToast("Please enter a target Link before submitting");
+                return;
+            }
+            if (qty < srv.min || qty > srv.max) {
+                showToast(`Quantity must be between ${srv.min} and ${srv.max}`);
+                return;
+            }
+
+            const charge = Number(((qty / 1000) * Number(srv.ratePer1k)).toFixed(4));
+            const orderId = `ORD-${Math.floor(1000 + Math.random() * 9000)}`;
+
+            if (config.balance >= charge) {
+                config.balance = Number((config.balance - charge).toFixed(3));
+            }
+
+            const newOrder = {
+                id: orderId,
+                date: new Date().toLocaleString(),
+                serviceId: srv.id,
+                serviceName: srv.name,
+                platform: srv.platform,
+                link,
+                qty,
+                charge,
+                status: "Pending"
+            };
+
+            orders.unshift(newOrder);
+            persistState();
+            refreshBalancesAndBadges();
+            document.getElementById("orderLinkInput").value = "";
+            showToast(`Order ${orderId} placed (Rs ${charge})`);
+
+            if (document.getElementById("alsoOpenWhatsappCheck").checked) {
+                const waNum = String(config.whatsapp || "923028372072").replace(/\D/g, "");
+                const text = [
+                    `*Usman SMM — New Order (${orderId})*`,
+                    `• *Service:* [Id-${srv.id}] ${srv.name}`,
+                    `• *Link:* ${link}`,
+                    `• *Quantity:* ${qty.toLocaleString()}`,
+                    `• *Charge:* Rs ${charge}`
+                ].join("\n");
+                window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+            }
+        }
+
+        function processMassLines(rawText) {
+            const lines = rawText.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+            if (!lines.length) {
+                showToast("Enter at least one mass order line");
+                return;
+            }
+            let added = 0;
+            lines.forEach((line) => {
+                const parts = line.split("|").map((p) => p.trim());
+                if (parts.length >= 3) {
+                    const id = Number(parts[0]);
+                    const link = parts[1];
+                    const qty = Number(parts[2]) || 1000;
+                    const srv = services.find((s) => s.id === id) || services[0];
+                    const charge = Number(((qty / 1000) * Number(srv.ratePer1k)).toFixed(4));
+                    orders.unshift({
+                        id: `ORD-${Math.floor(1000 + Math.random() * 9000)}`,
+                        date: new Date().toLocaleString(),
+                        serviceId: srv.id,
+                        serviceName: srv.name,
+                        platform: srv.platform,
+                        link,
+                        qty,
+                        charge,
+                        status: "Pending"
+                    });
+                    added++;
+                }
+            });
+            persistState();
+            refreshBalancesAndBadges();
+            showToast(`${added} mass order(s) added`);
+        }
+
+        function handleMassOrderSubmit() {
+            const box = document.getElementById("massOrderTextarea");
+            processMassLines(box.value);
+            box.value = "";
+        }
+
+        function submitBulkFromPage() {
+            const box = document.getElementById("bulkPageTextarea");
+            processMassLines(box.value);
+            box.value = "";
+        }
+
+        /* =====================================================================
+           SERVICE UPDATES FEED, MY ORDERS, FUNDS & TICKETS
+           ===================================================================== */
+        function renderServiceUpdates() {
+            const html = SERVICE_UPDATES.map((u) => `
+                <div class="py-2.5 space-y-1">
+                    <div class="text-[10px] font-semibold" style="color: var(--text-sub);">${u.date}</div>
+                    <div class="font-semibold leading-snug">${u.text}</div>
+                    <div class="text-[11px] font-bold text-emerald-600">${u.change}</div>
+                </div>
+            `).join("");
+            document.getElementById("liveServiceUpdatesFeed").innerHTML = html;
+            document.getElementById("allUpdatesContainer").innerHTML = html;
+        }
+
+        function renderMyOrdersTable() {
+            const tbody = document.getElementById("myOrdersTableBody");
+            if (!orders.length) {
+                tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center" style="color: var(--text-sub);">No orders placed yet.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = orders.map((o) => `
+                <tr>
+                    <td class="py-3 pr-3 font-bold text-[#155eef] whitespace-nowrap">${o.id}</td>
+                    <td class="py-3 px-3 whitespace-nowrap" style="color: var(--text-sub);">${o.date}</td>
+                    <td class="py-3 px-3 font-medium max-w-xs truncate">${o.serviceName}</td>
+                    <td class="py-3 px-3 max-w-[160px] truncate">${o.link}</td>
+                    <td class="py-3 px-3 font-semibold">${Number(o.qty).toLocaleString()}</td>
+                    <td class="py-3 px-3 font-bold">Rs ${o.charge}</td>
+                    <td class="py-3 pl-3">
+                        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${o.status === "Completed" ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}">${o.status}</span>
+                    </td>
+                </tr>
+            `).join("");
+        }
+
+        function submitRefillRequest() {
+            const id = document.getElementById("refillOrderIdInput").value.trim();
+            if (!id) return showToast("Enter an Order ID");
+            document.getElementById("refillOrderIdInput").value = "";
+            showToast(`Refill requested for ${id}`);
+        }
+
+        function handleAddFunds() {
+            const method = document.getElementById("depositMethodSelect").value;
+            const amount = Number(document.getElementById("depositAmountInput").value || 0);
+            const trx = document.getElementById("depositTrxInput").value.trim() || "Manual";
+            if (amount <= 0) return showToast("Enter a valid deposit amount");
+
+            config.balance = Number((config.balance + amount).toFixed(3));
+            txns.unshift({
+                id: `TX-${Math.floor(1000 + Math.random() * 9000)}`,
+                date: new Date().toLocaleDateString(),
+                method: `${method} (${trx})`,
+                amount,
+                status: "Added"
+            });
+            persistState();
+            refreshBalancesAndBadges();
+            document.getElementById("depositTrxInput").value = "";
+            showToast(`Rs ${amount} added to balance`);
+
+            const waNum = String(config.whatsapp || "923028372072").replace(/\D/g, "");
+            const text = `*Usman SMM — Deposit Receipt*\n• *User:* UsmanAmjad\n• *Method:* ${method}\n• *Amount:* Rs ${amount}\n• *Trx ID:* ${trx}`;
+            window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+        }
+
+        function renderTransactionsList() {
+            document.getElementById("transactionsListContainer").innerHTML = txns.map((t) => `
+                <div class="py-3 flex items-center justify-between">
+                    <div>
+                        <div class="font-bold">${t.id} — ${t.method}</div>
+                        <div class="text-[11px]" style="color: var(--text-sub);">${t.date}</div>
+                    </div>
+                    <div class="font-extrabold text-emerald-600">+ Rs ${t.amount}</div>
+                </div>
+            `).join("");
+        }
+
+        function renderServicesCatalog() {
+            const q = (document.getElementById("catalogSearchInput").value || "").toLowerCase().trim();
+            const list = services.filter((s) => !q || s.name.toLowerCase().includes(q) || s.platform.toLowerCase().includes(q) || String(s.id).includes(q));
+            document.getElementById("catalogTableBody").innerHTML = list.map((s) => `
+                <tr>
+                    <td class="py-3 pr-3 font-bold text-[#155eef]">Id-${s.id}</td>
+                    <td class="py-3 px-3 font-semibold">${s.platform}</td>
+                    <td class="py-3 px-3">${s.name}</td>
+                    <td class="py-3 px-3 font-bold">Rs ${Number(s.ratePer1k).toFixed(3)}</td>
+                    <td class="py-3 px-3" style="color: var(--text-sub);">${s.min} / ${s.max}</td>
+                    <td class="py-3 pl-3 text-right">
+                        <button type="button" onclick="quickSelectService(${s.id})" class="px-3 py-1 rounded-full bg-[#155eef] text-white text-[11px] font-bold cursor-pointer">Order</button>
+                    </td>
+                </tr>
+            `).join("");
+        }
+
+        function quickSelectService(serviceId) {
+            const srv = services.find((s) => s.id === serviceId);
+            if (!srv) return;
+            selectedPlatform = srv.platform;
+            renderPlatformPills();
+            filterCategoriesAndServices(srv.category);
+            populateServicesDropdown(srv.id);
+            switchView("new-order");
+        }
+
+        function askAiAssistant() {
+            const input = document.getElementById("aiPromptInput");
+            const q = input.value.trim();
+            if (!q) return;
+            const box = document.getElementById("aiChatMessages");
+            box.innerHTML += `<div class="p-3 rounded-xl bg-slate-200 dark:bg-slate-800 ml-auto max-w-md">${q}</div>`;
+            input.value = "";
+            let reply = "You can place orders under 'New Order' or contact Usman SMM directly on WhatsApp at 03028372072.";
+            if (q.toLowerCase().includes("whatsapp")) reply = "WhatsApp Channel Promo: 5K Members = Rs 1,000 | 10K Members = Rs 2,000 | 20K Members = Rs 4,500.";
+            box.innerHTML += `<div class="p-3 rounded-xl bg-[#155eef] text-white max-w-md">${reply}</div>`;
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function createSupportTicket() {
+            const sub = document.getElementById("ticketSubjectInput").value.trim();
+            const body = document.getElementById("ticketBodyInput").value.trim();
+            if (!sub || !body) return showToast("Fill subject and message");
+            tickets.unshift({ id: `TKT-${Math.floor(100 + Math.random() * 900)}`, sub, body, status: "Open" });
+            persistState();
+            refreshBalancesAndBadges();
+            renderTicketsList();
+            document.getElementById("ticketSubjectInput").value = "";
+            document.getElementById("ticketBodyInput").value = "";
+            showToast("Ticket submitted");
+        }
+
+        function renderTicketsList() {
+            const box = document.getElementById("ticketsListBox");
+            if (!tickets.length) {
+                box.innerHTML = `<div class="py-6 text-center" style="color: var(--text-sub);">No open tickets.</div>`;
+                return;
+            }
+            box.innerHTML = tickets.map((t) => `
+                <div class="py-3">
+                    <div class="font-bold text-[#155eef]">${t.id} — ${t.sub}</div>
+                    <div class="mt-0.5" style="color: var(--text-sub);">${t.body}</div>
+                </div>
+            `).join("");
+        }
+
+        /* =====================================================================
+           PIN-PROTECTED ADMIN PANEL (DEFAULT PIN: 7866)
+           ===================================================================== */
+        function handleAdminAccess() {
+            if (isAdminUnlocked) return switchView("admin");
+            document.getElementById("pinField").value = "";
+            document.getElementById("pinErrorMsg").classList.add("hidden");
+            document.getElementById("adminPinModal").classList.remove("hidden");
+            setTimeout(() => document.getElementById("pinField").focus(), 50);
+        }
+
+        function closePinModal() {
+            document.getElementById("adminPinModal").classList.add("hidden");
+        }
+
+        function verifyAdminPin(e) {
+            e.preventDefault();
+            if (document.getElementById("pinField").value.trim() === String(config.pin)) {
+                isAdminUnlocked = true;
+                closePinModal();
+                switchView("admin");
+                showToast("Admin unlocked");
+            } else {
+                document.getElementById("pinErrorMsg").classList.remove("hidden");
+            }
+        }
+
+        function lockAdminSession() {
+            isAdminUnlocked = false;
+            switchView("new-order");
+            showToast("Admin locked");
+        }
+
+        function renderAdminPanel() {
+            document.getElementById("adminBalanceInput").value = config.balance;
+            document.getElementById("adminWhatsappInput").value = config.whatsapp;
+            document.getElementById("adminOrdersTable").innerHTML = orders.length
+                ? orders.map((o) => `
+                    <tr>
+                        <td class="py-2 pr-3 font-bold text-[#155eef]">${o.id}</td>
+                        <td class="py-2 px-3 max-w-xs truncate">${o.serviceName}</td>
+                        <td class="py-2 px-3">${o.qty}</td>
+                        <td class="py-2 px-3 font-bold">Rs ${o.charge}</td>
+                        <td class="py-2 px-3">
+                            <select onchange="adminUpdateOrderStatus('${o.id}', this.value)" class="px-2 py-1 rounded-lg border text-xs" style="background-color: var(--bg-muted); border-color: var(--border-color);">
+                                <option value="Pending" ${o.status === "Pending" ? "selected" : ""}>Pending</option>
+                                <option value="In Progress" ${o.status === "In Progress" ? "selected" : ""}>In Progress</option>
+                                <option value="Completed" ${o.status === "Completed" ? "selected" : ""}>Completed</option>
+                            </select>
+                        </td>
+                        <td class="py-2 pl-3 text-right">
+                            <button type="button" onclick="adminDeleteOrder('${o.id}')" class="text-rose-500 font-bold cursor-pointer">Delete</button>
+                        </td>
+                    </tr>
+                `).join("")
+                : `<tr><td colspan="6" class="py-5 text-center" style="color: var(--text-sub);">No orders yet.</td></tr>`;
+        }
+
+        function saveAdminPanelSettings() {
+            const bal = Number(document.getElementById("adminBalanceInput").value);
+            let wa = document.getElementById("adminWhatsappInput").value.trim().replace(/\D/g, "");
+            if (wa.startsWith("03") && wa.length === 11) wa = "92" + wa.slice(1);
+            const newPin = document.getElementById("adminPinInput").value.trim();
+
+            if (!Number.isNaN(bal)) config.balance = bal;
+            if (wa) config.whatsapp = wa;
+            if (/^\d{4}$/.test(newPin)) config.pin = newPin;
+            document.getElementById("adminPinInput").value = "";
+
+            persistState();
+            refreshBalancesAndBadges();
+            showToast("Admin settings saved");
+        }
+
+        function addNewSmmService(e) {
+            e.preventDefault();
+            const platform = document.getElementById("adminNewPlatform").value;
+            const category = document.getElementById("adminNewCategory").value.trim();
+            const name = document.getElementById("adminNewServiceName").value.trim();
+            const ratePer1k = Number(document.getElementById("adminNewRate").value || 10);
+            const minQty = Number(document.getElementById("adminNewMin").value || 100);
+            const newId = Math.max(...services.map((s) => s.id), 1000) + 1;
+
+            services.unshift({ id: newId, platform, category, name, subTag: "Fast Start ⚡", ratePer1k, min: minQty, max: 10000000 });
+            persistState();
+            filterCategoriesAndServices(category);
+            e.target.reset();
+            showToast(`Added Id-${newId}`);
+        }
+
+        function adminUpdateOrderStatus(id, status) {
+            const ord = orders.find((o) => o.id === id);
+            if (!ord) return;
+            ord.status = status;
+            persistState();
+            showToast(`${id} -> ${status}`);
+        }
+
+        function adminDeleteOrder(id) {
+            orders = orders.filter((o) => o.id !== id);
+            persistState();
+            refreshBalancesAndBadges();
+            renderAdminPanel();
+        }
+
+        function refreshBalancesAndBadges() {
+            const formatted = `Rs ${Number(config.balance).toFixed(3)}`;
+            document.getElementById("sidebarBalanceDisplay").textContent = formatted;
+            document.getElementById("headerBalancePill").textContent = formatted;
+            document.getElementById("sidebarOrdersBadge").textContent = orders.length;
+            document.getElementById("ticketsBadgeCount").textContent = tickets.length;
+        }
+
+        /* =====================================================================
+           INITIALIZE DASHBOARD
+           ===================================================================== */
+        renderPlatformPills();
+        filterCategoriesAndServices();
+        renderServiceUpdates();
+        refreshBalancesAndBadges();
+    </script>
+</body>
+</html>
